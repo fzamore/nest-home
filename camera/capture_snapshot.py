@@ -158,9 +158,10 @@ if __name__ == '__main__':
   print('Fetched access token:', accessToken)
   print()
 
-  info = fetchCameraInfo(secrets, accessToken, 'backyard')
-  print('Fetched camera info:', info)
-  print()
+  # Provided as an example:
+  #info = fetchCameraInfo(secrets, accessToken, 'backyard')
+  #print('Fetched camera info:', info)
+  #print()
 
   streamUrl = fetchCameraStreamUrl(secrets, accessToken, 'backyard')
   print('Fetched stream URL:', streamUrl)
