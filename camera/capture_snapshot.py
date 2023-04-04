@@ -10,7 +10,8 @@ from urllib.request import Request, urlopen
 
 # TODO:
 # - pass `date +%Y-%m-%d_%H%M` to crontab, e.g., `<script> $(date +%Y.%m.%d).jpg`
-# - iterate over multiple cameras
+# - iterate over all cameras
+# - better README that explains how to obtain values for secrets.ini
 
 Camera = namedtuple('Camera', [
     'device_id',
@@ -142,7 +143,7 @@ def saveImageFromStream(streamUrl: str, filename: str) -> None:
 
 if __name__ == '__main__':
   if len(sys.argv) != 2:
-    print('USAGE: %s <output_file>' % sys.argv[0])
+    print('USAGE: %s <output_file.jpg>' % sys.argv[0])
     sys.exit(-1)
 
   filename = sys.argv[1]
