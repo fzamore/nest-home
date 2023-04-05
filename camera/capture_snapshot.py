@@ -64,9 +64,9 @@ def sendHttpRequest(
   return urlopen(req)
 
 # Loads secrets from the given secrets file and returns a Secrets object.
-def loadSecrets(secretsfile: str = 'secrets.ini') -> Secrets:
+def loadSecrets(secretsFile: str) -> Secrets:
   parser = configparser.ConfigParser()
-  parser.read(secretsfile)
+  parser.read(secretsFile)
   section = parser['secrets']
   return Secrets(
     section['CLIENT_ID'],
@@ -160,7 +160,11 @@ if __name__ == '__main__':
   print()
   print('Starting up...')
   print()
-  secrets = loadSecrets()
+  secretsFile = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    'secrets.ini',
+  )
+  secrets = loadSecrets(secretsFile)
   print('Secrets loaded.')
 
   accessToken = refreshAccessToken(secrets)
