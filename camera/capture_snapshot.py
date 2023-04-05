@@ -2,6 +2,7 @@ from collections import namedtuple
 import configparser
 from http.client import HTTPResponse
 import json
+import os.path
 import subprocess
 import sys
 from typing import Literal
@@ -140,6 +141,12 @@ def saveImageFromStream(streamUrl: str, filename: str) -> None:
   # We want it to throw errors if the process fails.
   subprocess.run(cmd, shell=True, check=True)
 
+# Appends the given prefix to the filename in the given full path.
+def getOutputFilename(fullpath: str, prefix: str) -> str:
+  dirname = os.path.dirname(fullpath)
+  basename = os.path.basename(fullpath)
+  return os.path.join(dirname, '%s_%s' % (prefix, basename))
+
 if __name__ == '__main__':
   if len(sys.argv) != 2:
     print()
@@ -148,7 +155,7 @@ if __name__ == '__main__':
     print()
     sys.exit(-1)
 
-  filenameSuffix = sys.argv[1]
+  outputPath = sys.argv[1]
 
   print()
   print('Starting up...')
@@ -172,7 +179,7 @@ if __name__ == '__main__':
     streamUrl = fetchCameraStreamUrl(secrets, accessToken, camera.label)
     print('Fetched stream URL:', streamUrl)
 
-    filename = '%s_%s' % (camera.label, filenameSuffix)
+    filename = getOutputFilename(outputPath, camera.label)
     try:
       saveImageFromStream(streamUrl, filename)
       print('Saved image: %s' % filename)
