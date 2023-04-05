@@ -9,8 +9,7 @@ from urllib.parse import urlencode, urlunparse
 from urllib.request import Request, urlopen
 
 # TODO:
-# - pass `date +%Y-%m-%d_%H%M` to crontab, e.g., `<script> $(date +%Y.%m.%d).jpg`
-# - iterate over all cameras
+# - pass `date +%Y-%m-%d_%H%M` to crontab, e.g., `<script> $(date +%Y-%m-%d_%H%M).jpg`
 # - better README that explains how to obtain values for secrets.ini
 
 Camera = namedtuple('Camera', [
@@ -143,10 +142,13 @@ def saveImageFromStream(streamUrl: str, filename: str) -> None:
 
 if __name__ == '__main__':
   if len(sys.argv) != 2:
+    print()
     print('USAGE: %s <output_file.jpg>' % sys.argv[0])
+    print('  The camera label will be prepended onto the output filename.')
+    print()
     sys.exit(-1)
 
-  filename = sys.argv[1]
+  filenameSuffix = sys.argv[1]
 
   print()
   print('Starting up...')
@@ -159,15 +161,24 @@ if __name__ == '__main__':
   print()
 
   # Provided as an example:
-  #info = fetchCameraInfo(secrets, accessToken, 'backyard')
-  #print('Fetched camera info:', info)
-  #print()
+  # info = fetchCameraInfo(secrets, accessToken, 'backyard')
+  # print('Fetched camera info:', info)
+  # print()
 
-  streamUrl = fetchCameraStreamUrl(secrets, accessToken, 'backyard')
-  print('Fetched stream URL:', streamUrl)
+  for camera in secrets.cameras:
+    print('Processing camera: %s' % camera.label)
+    print()
 
-  saveImageFromStream(streamUrl, filename)
-  print('Saved image: %s' % filename)
-  print()
+    streamUrl = fetchCameraStreamUrl(secrets, accessToken, camera.label)
+    print('Fetched stream URL:', streamUrl)
+
+    filename = '%s_%s' % (camera.label, filenameSuffix)
+    try:
+      saveImageFromStream(streamUrl, filename)
+      print('Saved image: %s' % filename)
+      print()
+    except subprocess.CalledProcessError as ex:
+      print('ERROR SAVING IMAGE:')
+      print(ex)
 
   print('Done.')
