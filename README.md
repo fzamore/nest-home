@@ -13,7 +13,7 @@ The script does the following:
    - Fetches a `rtsps://` streaming URL for the camera using the access token (using `GenerateRtspStream` via the [`executeCommand`](https://developers.google.com/nest/device-access/api) API).
    - Saves a single video frame from that stream using `ffmpeg`.
 
-Ideally, Google would provide an API to fetch a single video frame (to avoid fetching a streaming URL).
+*Ideally, Google would provide an API to fetch a single video frame (to avoid fetching a streaming URL).*
 
 ### Prerequisites:
 - Recent version `ffmpeg` with the ability to handle SSL/TLS.
