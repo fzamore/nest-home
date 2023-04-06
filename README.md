@@ -16,7 +16,7 @@ The script does the following:
 *Ideally, Google would provide an API to fetch a single video frame (to avoid fetching a streaming URL).*
 
 ### Prerequisites:
-- Recent version `ffmpeg` with the ability to handle SSL/TLS.
+- Recent version of `ffmpeg` with the ability to handle SSL/TLS.
 - Recent version of Python 3.
 - Must create `secrets.ini` in the `camera/` directory. See [secrets.ini.sample](camera/secrets.ini.sample) for an example.
 
