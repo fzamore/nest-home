@@ -9,10 +9,6 @@ from typing import Literal
 from urllib.parse import urlencode, urlunparse
 from urllib.request import Request, urlopen
 
-# TODO:
-# - pass `date +%Y-%m-%d_%H%M` to crontab, e.g., `<script> $(date +%Y-%m-%d_%H%M).jpg`
-# - better README that explains how to obtain values for secrets.ini
-
 Camera = namedtuple('Camera', [
     'device_id',
     'label',
