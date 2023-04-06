@@ -22,7 +22,7 @@ The script does the following:
 
 ### `secrets.ini`
 
-Before running the script, you must add several values to `secrets.ini`. As far as I recall, these are the necessary steps (I'm sure I'm forgetting things, but I did have to pay $5 at some point during this process):
+Before running the script, you must add several values to `secrets.ini`. As far as I recall, these are the necessary steps (I'm sure I'm forgetting things, and I had to pay $5 at some point during this process):
 
 1. Create a Google Cloud Project: https://console.cloud.google.com/. 
    1. After creating the project, choose "Create Credentials", then "OAuth2 Client ID". 
