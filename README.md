@@ -13,18 +13,27 @@ The script does the following:
 - - Fetches a `rtsps://` streaming URL for the camera using the access token (using `GenerateRtspStream` via the [`executeCommand`](https://developers.google.com/nest/device-access/api) API).
 - - Saves a single video frame from that stream using `ffmpeg`.
 
-Ideally, Google would provide an API to fetch a single video frame (so we could avoid fetching a streaming URL).
+Ideally, Google would provide an API to fetch a single video frame (to avoid fetching a streaming URL).
 
-### Pre-requisites:
+### Prerequisites:
 - Recent version `ffmpeg` with the ability to handle SSL/TLS.
 - Recent version of Python 3.
 - Must create `secrets.ini` in the `camera/` directory. See [secrets.ini.sample](camera/secrets.ini.sample) for an example.
 
 ### `secrets.ini`
 
-Before running the script, you must add several values to `secrets.ini`. 
+Before running the script, you must add several values to `secrets.ini`. As far as I recall, these are the necessary steps (I'm sure I'm forgetting things, but I did have to pay $5 at some point during this process):
 
-Use this guide as a reference: https://developers.google.com/nest/device-access/authorize.
+- Create a Google Cloud Project: https://console.cloud.google.com/. 
+- - From there, choose "Create Credentials", then "OAuth2 Client ID". 
+- - Configure the client ID as a Web Application and set any redirect URIs to `https://www.google.com`. 
+- - Note the client ID and add it to `secrets.ini` as **`CLIENT_ID`**.
+- - Choose "Add Secret", and add the resulting secret to `secrets.ini` as **`CLIENT_SECRET`**.
+- Create a Google Nest Project: https://console.nest.google.com/device-access/project-list
+- - Add the project ID to `secrets.ini` as **`PROJECT_ID`**.
+- - Add the (OAuth) client ID from the previous step to the Google Nest Project.
+- Next, you will need to obtain the **`REFRESH_TOKEN`** (for `secrets.ini`) via a series of convoluted steps outlined in this guide: https://developers.google.com/nest/device-access/authorize. You will also receive a temporary access token along with the refresh token.
+- After receiving the refresh token and access token, you'll need to make a call to [`devices.list`](https://developers.google.com/nest/device-access/reference/rest/v1/enterprises.devices/list) (see the above guide for details). Add the relevant camera IDs and labels to `secrets.ini` (in the `[cameras]` section).
 
 
 
