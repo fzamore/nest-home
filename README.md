@@ -10,7 +10,7 @@ To capture a current snapshot from a Nest camera: `python3 camera/capture_snapsh
 The script does the following:
 - Fetches a new access token using the refresh token from the secrets file.
 - For each camera in the secrets file:
-- - Fetches a live `rtsps://` streamiing URL for the camera using the access token.
+- - Fetches a `rtsps://` streaming URL for the camera using the access token (using `GenerateRtspStream` via the [`executeCommand`](https://developers.google.com/nest/device-access/api) API).
 - - Saves a single video frame from that stream using `ffmpeg`.
 
 Ideally, Google would provide an API to fetch a single video frame (so we could avoid fetching a streaming URL).
@@ -25,4 +25,6 @@ Ideally, Google would provide an API to fetch a single video frame (so we could 
 Before running the script, you must add several values to `secrets.ini`. 
 
 Use this guide as a reference: https://developers.google.com/nest/device-access/authorize.
+
+
 
