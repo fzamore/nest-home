@@ -34,6 +34,7 @@ Before running the script, you must add several values to `secrets.ini`. As far 
    1. Add the (OAuth) client ID from the previous step to the Google Nest Project.
 1. Obtain the **`REFRESH_TOKEN`** (for `secrets.ini`) via a series of convoluted steps outlined in this guide: https://developers.google.com/nest/device-access/authorize. 
    1. You will also receive a temporary access token along with the refresh token.
+   1. Apparently, if your app is in testing mode, this authorization (and refresh token) will expire in seven days: https://support.google.com/cloud/answer/10311615#zippy=%2Ctesting. I am still investigating whether publishing the app is a reliable fix to this issue.
 1. After receiving the refresh token and access token, you'll need to make a call to [`devices.list`](https://developers.google.com/nest/device-access/reference/rest/v1/enterprises.devices/list) (see the above guide for details). Add the relevant camera IDs and labels to `secrets.ini` (in the `[cameras]` section).
 
 
