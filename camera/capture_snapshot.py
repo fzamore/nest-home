@@ -7,7 +7,7 @@ import subprocess
 import sys
 from typing import Literal
 from urllib.parse import urlencode, urlunparse
-from urllib.request import Request, urlopen
+from urllib.request import HTTPDefaultErrorHandler, Request, build_opener
 
 Camera = namedtuple('Camera', [
     'device_id',
@@ -43,6 +43,14 @@ def buildHttpHeaders(accessToken: str) -> dict:
     'Authorization': 'Bearer %s' % accessToken,
   }
 
+# Custom error that prints the response body on error.
+class HTTPCustomErrorHandler(HTTPDefaultErrorHandler):
+    def http_error_default(self, req, fp, code, msg, hdrs):
+        print('HTTP ERROR: %d. Response body:' % code)
+        print(json.dumps(json.loads(fp.read()), indent=2))
+        print()
+        return super().http_error_default(req, fp, code, msg, hdrs)
+
 # Sends an HTTP request to the given URL, using the given HTTP method,
 # HTTP headers, and postdata. Returns an HTTPResponse, or throws if the
 # response isn't HTTP status code 200.
@@ -57,7 +65,10 @@ def sendHttpRequest(
     assert method == 'POST'
     encodedData = bytes(json.dumps(postdata), encoding = 'utf-8')
   req = Request(url, method=method, headers=headers, data=encodedData)
-  return urlopen(req)
+  # We use a custom error handler so we can print the response body even
+  # if the server returns an HTTP error code.
+  opener = build_opener(HTTPCustomErrorHandler())
+  return opener.open(req)
 
 # Loads secrets from the given secrets file and returns a Secrets object.
 def loadSecrets(secretsFile: str) -> Secrets:
@@ -160,9 +171,12 @@ if __name__ == '__main__':
     os.path.dirname(os.path.realpath(__file__)),
     'secrets.ini',
   )
+  print('Loading secrets...')
   secrets = loadSecrets(secretsFile)
   print('Secrets loaded.')
+  print()
 
+  print('Refreshing access token...')
   accessToken = refreshAccessToken(secrets)
   print('Fetched access token:', accessToken)
   print()
@@ -173,6 +187,7 @@ if __name__ == '__main__':
   # print()
 
   for camera in secrets.cameras:
+    print()
     print('Processing camera: %s' % camera.label)
     print()
 
